@@ -12,7 +12,12 @@ connectDB(); // Connect to MongoDB
 const app = express();
 
 // Security middlewares
-app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(
+  cors({
+    origin: "https://heirarchy-cgm7l99oq-jayanths-projects-203df876.vercel.app",
+  })
+);
+
 app.use(helmet());
 app.use(express.json());
 
