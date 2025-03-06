@@ -14,8 +14,18 @@ const app = express();
 // Security middlewares
 app.use(
   cors({
-    origin: "https://heirarchy-cgm7l99oq-jayanths-projects-203df876.vercel.app",
-    origin: "https://heirarchy.vercel.app/",
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "https://heirarchy-cgm7l99oq-jayanths-projects-203df876.vercel.app",
+        "https://heirarchy.vercel.app"
+      ];
+      
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error("Not allowed by CORS"), false); // Reject the request
+      }
+    }
   })
 );
 
