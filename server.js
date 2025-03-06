@@ -15,6 +15,7 @@ const app = express();
 app.use(
   cors({
     origin: "https://heirarchy-cgm7l99oq-jayanths-projects-203df876.vercel.app",
+    origin: "https://heirarchy.vercel.app/",
   })
 );
 
