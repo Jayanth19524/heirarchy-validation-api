@@ -1,3 +1,27 @@
+// Helper function to detect cycles in the reporting structure
+const hasCycle = (email, reportsToMap, visited, stack) => {
+  if (stack.has(email)) {
+    return true; // Cycle detected
+  }
+
+  if (visited.has(email)) {
+    return false; // Already visited this email, no cycle
+  }
+
+  visited.add(email);
+  stack.add(email);
+
+  const managers = reportsToMap.get(email) || [];
+  for (let manager of managers) {
+    if (hasCycle(manager, reportsToMap, visited, stack)) {
+      return true;
+    }
+  }
+
+  stack.delete(email);
+  return false;
+};
+
 export const validateOrgChart = (data) => {
   const errors = [];
   const userMap = new Map();
@@ -86,8 +110,15 @@ export const validateOrgChart = (data) => {
       }
 
       // Ensure a user does not have multiple direct parents unless they are a Manager
-      if (managers.length > 1 && Role !== "Manager") {
-        errorSet.add(`${FullName} should not have multiple parents unless they are a Manager.`);
+      if (managers.length > 1 ) {
+        errorSet.add(`${FullName} should not have multiple parents`);
+      }
+
+      // Cycle detection: Check for reporting loops
+      const visited = new Set();
+      const stack = new Set();
+      if (hasCycle(Email, reportsToMap, visited, stack)) {
+        errorSet.add(`${FullName} has a cyclic reporting structure.`);
       }
     }
 
