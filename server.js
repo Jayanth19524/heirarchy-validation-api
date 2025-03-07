@@ -16,6 +16,7 @@ app.use(
   cors({
     origin: (origin, callback) => {
       const allowedOrigins = [
+        "http://localhost:4200",
         "https://heirarchy-cgm7l99oq-jayanths-projects-203df876.vercel.app",
         "https://heirarchy.vercel.app"
       ];
@@ -41,7 +42,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Routes
-app.use("/api/upload", uploadRoutes);
+app.use("/api/upload",uploadRoutes);
+
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
